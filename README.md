@@ -1,4 +1,4 @@
-# cloud-build-slack-notifier
+# terraform-google-cloud-build-slack-notifier
 
 A Terraform module to enable Slack notifications for Cloud Build events.
 
