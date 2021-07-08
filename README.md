@@ -4,20 +4,20 @@ A Terraform module to enable Slack notifications for Cloud Build events.
 
 **Note - This will add the following resources to your project:**
 
-- Google Secret Manager for storing the Slack Webhook URL
 - Google Cloud Storage Bucket for storing the notifier configuration
 - Google Pub/Sub for events emitted from Cloud Build
 - Google Cloud Run for processing the events emitted from Cloud Build
 
-This module is mostly based on instructions found in GCP's [Configuring Slack notifications](https://cloud.google.com/build/docs/configuring-notifications/configure-slack).
+This module is based on the instructions found in GCP's [Configuring Slack notifications](https://cloud.google.com/build/docs/configuring-notifications/configure-slack) guide.
 
 ## Setup
 
-You will need a Slack app incoming webhook url for this to work.
+You will need a Slack app incoming webhook url stored in a Google Secret Manager
+secret for this to work.
 
 - Create a [Slack app](https://api.slack.com/apps?new_app=1) for your desired Slack workspace.
 - Activate [incoming webhooks](https://api.slack.com/messaging/webhooks) to post messages from Cloud Build to Slack.
-- After this module has run, add the webhook url to the secret in the UI
+- Create a new secret in Google Secret Manager and store the webhook url in it.
 
 ## Pre-commit Hooks
 
@@ -58,7 +58,6 @@ No requirements.
 
 | Name | Version |
 |------|---------|
-| <a name="provider_archive"></a> [archive](#provider\_archive) | n/a |
 | <a name="provider_google"></a> [google](#provider\_google) | n/a |
 | <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | n/a |
 | <a name="provider_random"></a> [random](#provider\_random) | n/a |
@@ -71,24 +70,34 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [google-beta_google_cloudfunctions_function.slack_notifier](https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/google_cloudfunctions_function) | resource |
+| [google-beta_google_cloud_run_service.cloud_build_notifier](https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/google_cloud_run_service) | resource |
+| [google-beta_google_project_service_identity.pubsub](https://registry.terraform.io/providers/hashicorp/google-beta/latest/docs/resources/google_project_service_identity) | resource |
+| [google_project_iam_member.notifier_project_roles](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.pubsub_invoker_roles](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
+| [google_project_iam_member.pubsub_project_roles](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_service.apis](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
+| [google_pubsub_subscription.cloud_builds](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_subscription) | resource |
 | [google_pubsub_topic.cloud_builds](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_topic) | resource |
-| [google_secret_manager_secret.cloud_build_slack_webhook_url](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret) | resource |
-| [google_secret_manager_secret_iam_member.slack_notifier_secret_accessor](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_member) | resource |
-| [google_service_account.slack_notifier](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
+| [google_secret_manager_secret_iam_member.notifier_secret_accessor](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/secret_manager_secret_iam_member) | resource |
+| [google_service_account.notifier](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
+| [google_service_account.pubsub_invoker](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/service_account) | resource |
 | [google_storage_bucket.cloud_build_notifier](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
-| [google_storage_bucket_object.cloud_build_slack_notifier_script](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
+| [google_storage_bucket_object.cloud_build_notifier_config](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
 | [random_id.cloud_build_notifier](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
-| [archive_file.slack_notifier](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
+| [google_project.slack_webhook_url_secret_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/project) | data source |
+| [google_secret_manager_secret_version.slack_webhook_url](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/secret_manager_secret_version) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
-| <a name="input_cloud_build_event_filter"></a> [cloud\_build\_event\_filter](#input\_cloud\_build\_event\_filter) | The filter to apply to incoming Cloud Build events. | `string` | `"build.substitutions[\"BRANCH_NAME\"] == \"main\""` |
-| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID for the project in which Cloud Build is running. | `string` | n/a |
-| <a name="input_slack_channel_name"></a> [slack\_channel\_name](#input\_slack\_channel\_name) | The Slack channel name in which to publish notifications. | `string` | n/a |
+| <a name="input_cloud_build_event_filter"></a> [cloud\_build\_event\_filter](#input\_cloud\_build\_event\_filter) | The CEL filter to apply to incoming Cloud Build events. | `string` | `"build.substitutions['BRANCH_NAME'] == 'main' && build.status in [Build.Status.SUCCESS, Build.Status.FAILURE, Build.Status.TIMEOUT]"` |
+| <a name="input_cloud_build_notifier_image"></a> [cloud\_build\_notifier\_image](#input\_cloud\_build\_notifier\_image) | The image to use for the notifier. | `string` | `"us-east1-docker.pkg.dev/gcb-release/cloud-build-notifiers/slack:latest"` |
+| <a name="input_name"></a> [name](#input\_name) | The name to use on all resources created. | `string` | n/a |
+| <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID of the project in which Cloud Build is running. | `string` | n/a |
+| <a name="input_region"></a> [region](#input\_region) | The region in which to deploy the notifier service. | `string` | `"us-central1"` |
+| <a name="input_slack_webhook_url_secret_id"></a> [slack\_webhook\_url\_secret\_id](#input\_slack\_webhook\_url\_secret\_id) | The ID of an existing Google Secret Manager secret, containing a Slack webhook URL. | `string` | n/a |
+| <a name="input_slack_webhook_url_secret_project"></a> [slack\_webhook\_url\_secret\_project](#input\_slack\_webhook\_url\_secret\_project) | The project ID containing the slack\_webhook\_url\_secret\_id. | `string` | n/a |
 
 ## Outputs
 

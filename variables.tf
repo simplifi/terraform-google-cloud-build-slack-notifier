@@ -1,30 +1,43 @@
 variable "project_id" {
-  description = "Project ID for the project in which Cloud Build is running."
+  description = "Project ID of the project in which Cloud Build is running."
   type        = string
 }
 
 variable "name" {
-  description = "The name to use on all resources created. A good name might be the name of the Slack channel in which this notifier will publish messages."
+  description = "The name to use on all resources created."
   type        = string
+
+  validation {
+    condition     = can(regex("[a-z0-9-]{0,30}", var.name))
+    error_message = "A name must be lowercase letters, numbers, or -."
+  }
 }
 
 variable "slack_webhook_url_secret_id" {
-  description = "The GSM secret for the existing Slack webhook URL. Optional - If not provided a secret will be created with the value of 'slack_webhook_url'."
+  description = "The ID of an existing Google Secret Manager secret, containing a Slack webhook URL."
   type        = string
-  default     = ""
 }
 
-variable "slack_webhook_url" {
-  description = "The Slack webhook URL on which to publish notifications. Optional - If not provided it the existing secret_id should be passed in on 'slack_webhook_url_secret_id'."
+variable "slack_webhook_url_secret_project" {
+  description = "The project ID containing the slack_webhook_url_secret_id."
   type        = string
-  sensitive   = true
-  default     = ""
+}
+
+variable "region" {
+  description = "The region in which to deploy the notifier service."
+  type        = string
+  default     = "us-central1"
 }
 
 # See: https://cloud.google.com/build/docs/configuring-notifications/configure-slack#using_cel_to_filter_build_events
 variable "cloud_build_event_filter" {
-  description = "The filter to apply to incoming Cloud Build events."
+  description = "The CEL filter to apply to incoming Cloud Build events."
   type        = string
-  default     = "build.substitutions[\"BRANCH_NAME\"] == \"main\""
+  default     = "build.substitutions['BRANCH_NAME'] == 'main' && build.status in [Build.Status.SUCCESS, Build.Status.FAILURE, Build.Status.TIMEOUT]"
 }
 
+variable "cloud_build_notifier_image" {
+  description = "The image to use for the notifier."
+  type        = string
+  default     = "us-east1-docker.pkg.dev/gcb-release/cloud-build-notifiers/slack:latest"
+}
