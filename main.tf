@@ -157,8 +157,8 @@ resource "google_storage_bucket_object" "cloud_build_notifier_config" {
 resource "google_cloud_run_service" "cloud_build_notifier" {
   provider = google-beta
 
-  #FIXME: Is there no way to tell a cloud run service to restart when it's config changes?
-  name     = "${local.base_name}-${lower(regex("[0-9A-Za-z]+", google_storage_bucket_object.cloud_build_notifier_config.crc32c))}" # HACK To make the cloud run job change when the config changes
+  # HACK To make the cloud run job redeploy when the config changes
+  name     = "${local.base_name}-${lower(regex("[0-9A-Za-z]+", google_storage_bucket_object.cloud_build_notifier_config.crc32c))}"
   location = var.region
   project  = var.project_id
 
