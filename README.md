@@ -1,5 +1,7 @@
 # terraform-google-cloud-build-slack-notifier
 
+[![Build Status](https://www.travis-ci.com/simplifi/terraform-google-cloud-build-slack-notifier.svg?token=Tyt37RU5xWf1sPRSJyoD&branch=main)](https://www.travis-ci.com/simplifi/terraform-google-cloud-build-slack-notifier)
+
 A Terraform module to enable Slack notifications for Cloud Build events.
 
 **Note - This will add the following resources to your project:**
