@@ -1,7 +1,7 @@
 # Cloud Build Notifier
 
 locals {
-  base_name = "cbnotify-${var.name}"
+  base_name = "cbn-${var.name}"
 }
 
 
@@ -49,7 +49,7 @@ data "google_secret_manager_secret_version" "slack_webhook_url" {
 
 # Create cloud build notifier service account
 resource "google_service_account" "notifier" {
-  account_id = "${local.base_name}-notifier"
+  account_id = "${local.base_name}-nfy"
   project    = var.project_id
 }
 
@@ -93,7 +93,7 @@ resource "google_project_iam_member" "pubsub_project_roles" {
 
 # Create a pub/sub invoker service account
 resource "google_service_account" "pubsub_invoker" {
-  account_id = "${local.base_name}-pubsub"
+  account_id = "${local.base_name}-pbs"
   project    = var.project_id
 }
 

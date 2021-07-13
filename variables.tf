@@ -8,7 +8,7 @@ variable "name" {
   type        = string
 
   validation {
-    condition     = can(regex("[a-z0-9-]{0,30}", var.name))
+    condition     = can(regex("[a-z0-9-]{0,20}", var.name))
     error_message = "A name must be lowercase letters, numbers, or -."
   }
 }
