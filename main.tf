@@ -154,11 +154,18 @@ resource "google_storage_bucket_object" "cloud_build_notifier_config" {
 # Cloud Run
 # ------------------------------------------------------------------------------
 
+resource "random_id" "cloud_build_notifier_service" {
+  # We use a keeper here so we can force cloud run to redeploy on script change.
+  keepers = {
+    script_hash = google_storage_bucket_object.cloud_build_notifier_config.md5hash
+  }
+
+  byte_length = 4
+}
+
 resource "google_cloud_run_service" "cloud_build_notifier" {
   provider = google-beta
-
-  # HACK To make the cloud run job redeploy when the config changes
-  name     = "${local.base_name}-${lower(regex("[0-9A-Za-z]+", google_storage_bucket_object.cloud_build_notifier_config.crc32c))}"
+  name     = "${local.base_name}-${random_id.cloud_build_notifier_service.hex}"
   location = var.region
   project  = var.project_id
 
