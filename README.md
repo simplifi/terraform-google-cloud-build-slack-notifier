@@ -1,5 +1,7 @@
 # terraform-google-cloud-build-slack-notifier
 
+[![Build Status](https://www.travis-ci.com/simplifi/terraform-google-cloud-build-slack-notifier.svg?token=Tyt37RU5xWf1sPRSJyoD&branch=main)](https://www.travis-ci.com/simplifi/terraform-google-cloud-build-slack-notifier)
+
 A Terraform module to enable Slack notifications for Cloud Build events.
 
 **Note - This will add the following resources to your project:**
@@ -26,8 +28,11 @@ secret for this to work.
 The enabled hooks check for a variety of common problems in Terraform code, and
 will run any time you commit to your branch.
 
-Pre-commit (and dependencies) can be installed by running:
-`brew install pre-commit coreutils terraform-docs`
+Pre-commit (and dependencies) can be installed by following the instructions
+found here:
+
+- [Install `pre-commit`](https://pre-commit.com/#install)
+- [Install `terraform-docs`](https://github.com/terraform-docs/terraform-docs#installation)
 
 To enable the hooks locally, run the following from the root of this repo:
 `pre-commit install`
