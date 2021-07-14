@@ -14,7 +14,7 @@ variable "name" {
 }
 
 variable "slack_webhook_url_secret_id" {
-  description = "The ID of an existing Google Secret Manager secret, containing a Slack webhook URL."
+  description = "The ID of an existing Google Secret Manager secret, containing a Slack webhook URL. This is usually the `id` from the output of a `google_secret_manager_secret` resource."
   type        = string
 }
 

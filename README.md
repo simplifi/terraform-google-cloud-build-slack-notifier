@@ -106,7 +106,7 @@ No modules.
 | <a name="input_name"></a> [name](#input\_name) | The name to use on all resources created. | `string` | n/a |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID of the project in which Cloud Build is running. | `string` | n/a |
 | <a name="input_region"></a> [region](#input\_region) | The region in which to deploy the notifier service. | `string` | `"us-central1"` |
-| <a name="input_slack_webhook_url_secret_id"></a> [slack\_webhook\_url\_secret\_id](#input\_slack\_webhook\_url\_secret\_id) | The ID of an existing Google Secret Manager secret, containing a Slack webhook URL. | `string` | n/a |
+| <a name="input_slack_webhook_url_secret_id"></a> [slack\_webhook\_url\_secret\_id](#input\_slack\_webhook\_url\_secret\_id) | The ID of an existing Google Secret Manager secret, containing a Slack webhook URL. This is usually the `id` from the output of a `google_secret_manager_secret` resource. | `string` | n/a |
 | <a name="input_slack_webhook_url_secret_project"></a> [slack\_webhook\_url\_secret\_project](#input\_slack\_webhook\_url\_secret\_project) | The project ID containing the slack\_webhook\_url\_secret\_id. | `string` | n/a |
 
 ## Outputs
