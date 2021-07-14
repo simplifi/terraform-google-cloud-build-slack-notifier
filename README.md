@@ -60,17 +60,17 @@ To skip running the hooks when you commit:
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
-| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 3.74 |
-| <a name="requirement_google-beta"></a> [google-beta](#requirement\_google-beta) | ~> 3.74 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.1 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | >= 3.20 |
+| <a name="requirement_google-beta"></a> [google-beta](#requirement\_google-beta) | >= 3.30 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | ~> 3.74 |
-| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | ~> 3.74 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.1 |
+| <a name="provider_google"></a> [google](#provider\_google) | >= 3.20 |
+| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | >= 3.30 |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 2.1 |
 
 ## Modules
 
