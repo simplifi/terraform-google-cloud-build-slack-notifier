@@ -66,10 +66,6 @@ resource "google_secret_manager_secret_iam_member" "notifier_secret_accessor" {
   secret_id = var.slack_webhook_url_secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${google_service_account.notifier.email}"
-
-  depends_on = [
-    google_project_service.apis
-  ]
 }
 
 # Look up the pubsub SA
@@ -192,6 +188,11 @@ resource "google_cloud_run_service" "cloud_build_notifier" {
       metadata.0.annotations,
     ]
   }
+
+  depends_on = [
+    google_project_service.apis["run.googleapis.com"],
+    google_secret_manager_secret_iam_member.notifier_secret_accessor
+  ]
 }
 
 
