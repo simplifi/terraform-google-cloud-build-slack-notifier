@@ -27,18 +27,12 @@ resource "google_project_service" "apis" {
   disable_dependent_services = true
 }
 
-# Lookup the slack_webhook_url_secret_project so we can access the project number
-data "google_project" "slack_webhook_url_secret_project" {
-  project_id = var.slack_webhook_url_secret_project
-}
-
-
 # ------------------------------------------------------------------------------
 # Secrets
 # ------------------------------------------------------------------------------
 
 data "google_secret_manager_secret_version" "slack_webhook_url" {
-  project = data.google_project.slack_webhook_url_secret_project.number
+  project = var.slack_webhook_url_secret_project
   secret  = var.slack_webhook_url_secret_id
 }
 
@@ -68,7 +62,8 @@ resource "google_project_iam_member" "notifier_project_roles" {
 
 # Give the notifier service account access to the secret
 resource "google_secret_manager_secret_iam_member" "notifier_secret_accessor" {
-  secret_id = data.google_secret_manager_secret_version.slack_webhook_url.secret
+  project   = var.slack_webhook_url_secret_project
+  secret_id = var.slack_webhook_url_secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${google_service_account.notifier.email}"
 
