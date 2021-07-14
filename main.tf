@@ -1,7 +1,7 @@
 # Cloud Build Notifier
 
 locals {
-  base_name = "cbnotify-${var.name}"
+  base_name = "cbn-${var.name}"
 }
 
 
@@ -27,18 +27,12 @@ resource "google_project_service" "apis" {
   disable_dependent_services = true
 }
 
-# Lookup the slack_webhook_url_secret_project so we can access the project number
-data "google_project" "slack_webhook_url_secret_project" {
-  project_id = var.slack_webhook_url_secret_project
-}
-
-
 # ------------------------------------------------------------------------------
 # Secrets
 # ------------------------------------------------------------------------------
 
 data "google_secret_manager_secret_version" "slack_webhook_url" {
-  project = data.google_project.slack_webhook_url_secret_project.number
+  project = var.slack_webhook_url_secret_project
   secret  = var.slack_webhook_url_secret_id
 }
 
@@ -49,7 +43,7 @@ data "google_secret_manager_secret_version" "slack_webhook_url" {
 
 # Create cloud build notifier service account
 resource "google_service_account" "notifier" {
-  account_id = "${local.base_name}-notifier"
+  account_id = "${local.base_name}-nfy"
   project    = var.project_id
 }
 
@@ -68,13 +62,10 @@ resource "google_project_iam_member" "notifier_project_roles" {
 
 # Give the notifier service account access to the secret
 resource "google_secret_manager_secret_iam_member" "notifier_secret_accessor" {
-  secret_id = data.google_secret_manager_secret_version.slack_webhook_url.secret
+  project   = var.slack_webhook_url_secret_project
+  secret_id = var.slack_webhook_url_secret_id
   role      = "roles/secretmanager.secretAccessor"
   member    = "serviceAccount:${google_service_account.notifier.email}"
-
-  depends_on = [
-    google_project_service.apis
-  ]
 }
 
 # Look up the pubsub SA
@@ -93,7 +84,7 @@ resource "google_project_iam_member" "pubsub_project_roles" {
 
 # Create a pub/sub invoker service account
 resource "google_service_account" "pubsub_invoker" {
-  account_id = "${local.base_name}-pubsub"
+  account_id = "${local.base_name}-pbs"
   project    = var.project_id
 }
 
@@ -154,11 +145,18 @@ resource "google_storage_bucket_object" "cloud_build_notifier_config" {
 # Cloud Run
 # ------------------------------------------------------------------------------
 
+resource "random_id" "cloud_build_notifier_service" {
+  # We use a keeper here so we can force cloud run to redeploy on script change.
+  keepers = {
+    script_hash = google_storage_bucket_object.cloud_build_notifier_config.md5hash
+  }
+
+  byte_length = 4
+}
+
 resource "google_cloud_run_service" "cloud_build_notifier" {
   provider = google-beta
-
-  # HACK To make the cloud run job redeploy when the config changes
-  name     = "${local.base_name}-${lower(regex("[0-9A-Za-z]+", google_storage_bucket_object.cloud_build_notifier_config.crc32c))}"
+  name     = "${local.base_name}-${random_id.cloud_build_notifier_service.hex}"
   location = var.region
   project  = var.project_id
 
@@ -190,6 +188,11 @@ resource "google_cloud_run_service" "cloud_build_notifier" {
       metadata.0.annotations,
     ]
   }
+
+  depends_on = [
+    google_project_service.apis["run.googleapis.com"],
+    google_secret_manager_secret_iam_member.notifier_secret_accessor
+  ]
 }
 
 

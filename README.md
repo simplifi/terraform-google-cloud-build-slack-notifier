@@ -60,17 +60,17 @@ To skip running the hooks when you commit:
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
-| <a name="requirement_google"></a> [google](#requirement\_google) | ~> 3.74 |
-| <a name="requirement_google-beta"></a> [google-beta](#requirement\_google-beta) | ~> 3.74 |
-| <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.1 |
+| <a name="requirement_google"></a> [google](#requirement\_google) | >= 3.20 |
+| <a name="requirement_google-beta"></a> [google-beta](#requirement\_google-beta) | >= 3.30 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.1 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | ~> 3.74 |
-| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | ~> 3.74 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.1 |
+| <a name="provider_google"></a> [google](#provider\_google) | >= 3.20 |
+| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | >= 3.30 |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 2.1 |
 
 ## Modules
 
@@ -94,7 +94,7 @@ No modules.
 | [google_storage_bucket.cloud_build_notifier](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket) | resource |
 | [google_storage_bucket_object.cloud_build_notifier_config](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket_object) | resource |
 | [random_id.cloud_build_notifier](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
-| [google_project.slack_webhook_url_secret_project](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/project) | data source |
+| [random_id.cloud_build_notifier_service](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [google_secret_manager_secret_version.slack_webhook_url](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/secret_manager_secret_version) | data source |
 
 ## Inputs
@@ -106,7 +106,7 @@ No modules.
 | <a name="input_name"></a> [name](#input\_name) | The name to use on all resources created. | `string` | n/a |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID of the project in which Cloud Build is running. | `string` | n/a |
 | <a name="input_region"></a> [region](#input\_region) | The region in which to deploy the notifier service. | `string` | `"us-central1"` |
-| <a name="input_slack_webhook_url_secret_id"></a> [slack\_webhook\_url\_secret\_id](#input\_slack\_webhook\_url\_secret\_id) | The ID of an existing Google Secret Manager secret, containing a Slack webhook URL. | `string` | n/a |
+| <a name="input_slack_webhook_url_secret_id"></a> [slack\_webhook\_url\_secret\_id](#input\_slack\_webhook\_url\_secret\_id) | The ID of an existing Google Secret Manager secret, containing a Slack webhook URL. This is usually the `id` from the output of a `google_secret_manager_secret` resource. | `string` | n/a |
 | <a name="input_slack_webhook_url_secret_project"></a> [slack\_webhook\_url\_secret\_project](#input\_slack\_webhook\_url\_secret\_project) | The project ID containing the slack\_webhook\_url\_secret\_id. | `string` | n/a |
 
 ## Outputs
