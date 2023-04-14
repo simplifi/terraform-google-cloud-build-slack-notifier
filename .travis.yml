@@ -16,7 +16,7 @@ install:
 
   # Install terraform-docs
   - curl -Lo /tmp/terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
-  - tar -xzf /tmp/terraform-docs.tar.gz
+  - tar -xzf /tmp/terraform-docs.tar.gz -C /tmp/
   - mv /tmp/terraform-docs ${HOME}/bin/terraform-docs
 
 jobs:
