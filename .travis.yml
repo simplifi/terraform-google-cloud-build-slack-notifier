@@ -10,14 +10,14 @@ install:
   - pip install pre-commit
 
   # Install terraform
-  - curl -Lo terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
-  - unzip terraform.zip
-  - mv terraform ${HOME}/bin/terraform
+  - curl -Lo /tmp/terraform.zip "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+  - unzip /tmp/terraform.zip
+  - mv /tmp/terraform ${HOME}/bin/terraform
 
   # Install terraform-docs
-  - curl -Lo ./terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
-  - tar -xzf terraform-docs.tar.gz
-  - mv terraform-docs ${HOME}/bin/terraform-docs
+  - curl -Lo /tmp/terraform-docs.tar.gz "https://github.com/terraform-docs/terraform-docs/releases/download/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-linux-amd64.tar.gz"
+  - tar -xzf /tmp/terraform-docs.tar.gz
+  - mv /tmp/terraform-docs ${HOME}/bin/terraform-docs
 
 jobs:
   include:
