@@ -109,6 +109,7 @@ resource "google_storage_bucket" "cloud_build_notifier" {
   project       = var.project_id
   name          = "${local.base_name}-${random_id.cloud_build_notifier.hex}"
   force_destroy = true
+  location      = var.region
 }
 
 resource "google_storage_bucket_object" "cloud_build_notifier_config" {
