@@ -41,3 +41,11 @@ variable "cloud_build_notifier_image" {
   type        = string
   default     = "us-east1-docker.pkg.dev/gcb-release/cloud-build-notifiers/slack:latest"
 }
+
+# https://cloud.google.com/build/docs/configuring-notifications/configure-slack#configuring_slack_notifications (see slack.json under number 7)
+# The default slack.json will be used if this is not provided.
+variable "override_slack_template_json" {
+  description = "Custom template to use for the Slack notifications, which overrides the default."
+  type        = string
+  default     = ""
+}
