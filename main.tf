@@ -112,6 +112,16 @@ resource "google_storage_bucket" "cloud_build_notifier" {
   location      = var.region
 }
 
+locals {
+  slack_template_json = var.override_slack_template_json != "" ? var.override_slack_template_json : file("${path.module}/slack.json")
+}
+
+resource "google_storage_bucket_object" "slack_template" {
+  name    = "${local.base_name}-slack.json"
+  bucket  = google_storage_bucket.cloud_build_notifier.name
+  content = local.slack_template_json
+}
+
 resource "google_storage_bucket_object" "cloud_build_notifier_config" {
   name   = "${local.base_name}-config.yaml"
   bucket = google_storage_bucket.cloud_build_notifier.name
@@ -129,6 +139,10 @@ resource "google_storage_bucket_object" "cloud_build_notifier_config" {
           webhookUrl = {
             secretRef = "webhook-url"
           }
+        }
+        template = {
+          type = "golang"
+          uri  = "${google_storage_bucket.cloud_build_notifier.url}/${local.base_name}-slack.json"
         }
       }
       secrets = [
