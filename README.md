@@ -68,9 +68,9 @@ To skip running the hooks when you commit:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | >= 3.20 |
-| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | >= 3.30 |
-| <a name="provider_random"></a> [random](#provider\_random) | >= 2.1 |
+| <a name="provider_google"></a> [google](#provider\_google) | 5.25.0 |
+| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | 5.25.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.6.1 |
 
 ## Modules
 
@@ -104,7 +104,7 @@ No modules.
 |------|-------------|------|---------|
 | <a name="input_cloud_build_event_filter"></a> [cloud\_build\_event\_filter](#input\_cloud\_build\_event\_filter) | The CEL filter to apply to incoming Cloud Build events. | `string` | `"build.substitutions['BRANCH_NAME'] == 'main' && build.status in [Build.Status.SUCCESS, Build.Status.FAILURE, Build.Status.TIMEOUT]"` |
 | <a name="input_cloud_build_notifier_image"></a> [cloud\_build\_notifier\_image](#input\_cloud\_build\_notifier\_image) | The image to use for the notifier. | `string` | `"us-east1-docker.pkg.dev/gcb-release/cloud-build-notifiers/slack:latest"` |
-| <a name="input_disable_services_on_destroy"></a> [disable\_services\_on\_destroy](#input\_disable\_services\_on\_destroy) | If true, the service APIs used will be disabled on destroy. | `bool` | `true` |
+| <a name="input_disable_services_on_destroy"></a> [disable\_services\_on\_destroy](#input\_disable\_services\_on\_destroy) | If true, the service APIs used will be disabled on destroy. | `bool` | `false` |
 | <a name="input_name"></a> [name](#input\_name) | The name to use on all resources created. | `string` | n/a |
 | <a name="input_override_slack_template_json"></a> [override\_slack\_template\_json](#input\_override\_slack\_template\_json) | Custom template to use for the Slack notifications, which overrides the default. | `string` | `""` |
 | <a name="input_project_id"></a> [project\_id](#input\_project\_id) | Project ID of the project in which Cloud Build is running. | `string` | n/a |
