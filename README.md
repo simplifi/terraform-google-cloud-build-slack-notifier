@@ -68,9 +68,9 @@ To skip running the hooks when you commit:
 
 | Name | Version |
 |------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | 5.25.0 |
-| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | 5.25.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.6.1 |
+| <a name="provider_google"></a> [google](#provider\_google) | >= 3.20 |
+| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | >= 3.30 |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 2.1 |
 
 ## Modules
 
