@@ -49,3 +49,9 @@ variable "override_slack_template_json" {
   type        = string
   default     = ""
 }
+
+variable "disable_services_on_destroy" {
+  description = "If true, the service APIs used will be disabled on destroy."
+  type        = bool
+  default     = false
+}
