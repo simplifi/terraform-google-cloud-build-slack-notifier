@@ -64,14 +64,6 @@ To skip running the hooks when you commit:
 | <a name="requirement_google-beta"></a> [google-beta](#requirement\_google-beta) | >= 3.30 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.1 |
 
-## Providers
-
-| Name | Version |
-|------|---------|
-| <a name="provider_google"></a> [google](#provider\_google) | >= 3.20 |
-| <a name="provider_google-beta"></a> [google-beta](#provider\_google-beta) | >= 3.30 |
-| <a name="provider_random"></a> [random](#provider\_random) | >= 2.1 |
-
 ## Modules
 
 No modules.
